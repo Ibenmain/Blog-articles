@@ -6,6 +6,9 @@ import Link from "next/link"
 import * as Yup from 'yup';
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { signIn } from "next-auth/react"
+import toast from "react-hot-toast"
+import { useRouter } from "next/router"
 
 
 const validationSchema = Yup.object().shape({
@@ -24,22 +27,37 @@ interface FormValues {
 }
 
 // Handle form submission
-const onSubmit = (data: FormValues) => {
-    console.log('Form data:', data);
-};
-export default function SignIn() {
+
+const SignIn = () => {
+    const router = useRouter();
     
-    // Initialize useForm hook with Yup schema
+    const onSubmit = async ({ email, password }: FormValues) => {
+        const result = await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+        });
+    
+        if (result?.ok) {
+            toast.success("Successfully signed in!");
+            console.log("Successfully signed in!", result.data);
+            
+            router.push("/profile");
+          } else {
+            toast.error("Invalid email or password");
+          }
+    }
+
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
     return (
-        <Card className="mx-auto max-w-sm ">
+        <Card className="mx-auto max-w-sm">
             <CardHeader className="space-y-1">
                 <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
                 <CardDescription>Enter your email and password to login to your account</CardDescription>
@@ -50,20 +68,20 @@ export default function SignIn() {
                     <div className="space-y-4">
                         <div className="space-y-1">
                             <Label htmlFor="email">Email</Label>
-                            <Input {...register('email')} id="email" type="email" placeholder="m@example.com" required />
+                            <Input  {...register('email')} id="email" type="email" placeholder="m@example.com"  />
                             {errors.email && (
                                 <p className="text-red-500 text-sm">{errors.email.message}</p>
                             )}
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="password">Password</Label>
-                            <Input {...register('password')} id="password" type="password" required />
-                            {errors.email && (
+                            <Input {...register('password')} id="password" type="password"  />
+                            {errors.password && (
                                 <p className="text-red-500 text-sm">{errors?.password?.message}</p>
                             )}
                         </div>
-                        <Button type="submit" className="w-full" disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Sign In'}
+                        <Button type="submit" className="w-full">
+                             Sign In
                         </Button>
                     </div>
                     <div className="flex justify-center items-center p-2 space-x-1">
@@ -77,3 +95,5 @@ export default function SignIn() {
         </Card>
     )
 }
+
+export default SignIn
