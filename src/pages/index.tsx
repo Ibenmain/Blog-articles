@@ -15,19 +15,19 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
           <h1 className="text-xl font-bold text-gray-800">My Website</h1>
           <div className="space-x-4">
-            <Button onClick={() => {router.push('/auth/sign-in')}} variant="outline">Login</Button>
-            <Button onClick={() => {router.push('/auth/sign-up')}} variant="default">Register</Button>
+            <Button onClick={() => {router.push('/auth/signin')}} variant="outline">Login</Button>
+            <Button onClick={() => {router.push('/auth/signup')}} variant="default">Register</Button>
           </div>
         </div>
       </header>
 
       <main className="h-full flex-grow w-full pt-16 bg-gray-50 flex flex-col items-center justify-center">
         <section className="w-full text-center py-20">
-          <h1 className="text-5xl font-bold text-gray-800">Welcome to Our Platform</h1>
+          <h1 className="text-5xl font-bold text-gray-800">Welcome to Our Websit</h1>
           <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
             Discover amazing features and services that will boost your productivity.
           </p>
-          <Button className="mt-6" variant="outline">Get Started</Button>
+          <Button onClick={() => {router.push('/auth/signin')}} className="mt-6" variant="outline">Get Started</Button>
         </section>
       </main>
 

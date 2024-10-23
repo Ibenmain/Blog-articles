@@ -3,33 +3,51 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 interface AddProductDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onAddProduct: (product: { title: string; description: string; price: number; image: File | null }) => void;
 }
 
-const AddProductDialog: React.FC<AddProductDialogProps> = ({ isOpen, onClose, onAddProduct }) => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [price, setPrice] = useState('');
-    const [image, setImage] = useState<File | null>(null);
+const AddProductDialog: React.FC<AddProductDialogProps> = ({ isOpen, onClose }) => {
+    const session = useSession();
+    const [imageUrl, setImageUrl] = useState<File | null>(null);
+    const [data, setData] = useState({
+        title: '',
+        description: '',
+        price: '',
+    });
+
+    console.log('session ', session);
+
+    const AddProduct = async () => {
+
+        const formData = { ...data, image: imageUrl?.name, userId: session.data?.user?.id};
+
+        console.log(formData);
+       
+
+
+        try {
+            const response = await axios.post('/api/product/add', formData);
+            console.log(response.data);
+            if (response.status === 201) {
+                toast.success('Product added successfully');
+            } else {
+                toast.error('Failed to add product');
+            }
+        }
+        catch (error) {
+            toast.error('Failed to add product');
+        }
+    }
 
     const handleSubmit = () => {
-        if (title && description && price && image) {
-            onAddProduct({
-                title,
-                description,
-                price: parseFloat(price),
-                image,
-            });
-            onClose();
-            setTitle('');
-            setDescription('');
-            setPrice('');
-            setImage(null);
-        }
+        AddProduct();
+        onClose();
     };
 
     return (
@@ -44,8 +62,8 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ isOpen, onClose, on
                         <Input
                             id="title"
                             type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            // value={title}
+                            onChange={(e) => setData({ ...data, title: e.target.value })}
                             className="mt-1"
                             placeholder="Enter product title"
                             required
@@ -55,8 +73,8 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ isOpen, onClose, on
                         <Label className="block text-sm font-medium text-gray-700" htmlFor="description">Description</Label>
                         <textarea
                             id="description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            // value={description}
+                            onChange={(e) => setData({ ...data, description: e.target.value })}
                             className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows={3}
                             placeholder="Enter product description"
@@ -68,8 +86,8 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ isOpen, onClose, on
                         <Input
                             id="price"
                             type="number"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            // value={price}
+                            onChange={(e) => setData({ ...data, price: e.target.value })}
                             className="mt-1"
                             placeholder="Enter product price"
                             required
@@ -82,9 +100,9 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({ isOpen, onClose, on
                             type="file"
                             onChange={(e) => {
                                 if (e.target.files && e.target.files.length > 0) {
-                                    setImage(e.target.files[0]);
+                                    setImageUrl(e.target.files[0] as File);
                                 } else {
-                                    setImage(null);
+                                    setImageUrl(null);
                                 }
                             }}
                         />

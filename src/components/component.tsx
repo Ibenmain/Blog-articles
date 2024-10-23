@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react";
+import Image from "next/image";
 
 interface ProductCardProps {
   imageUrl: string;
@@ -20,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ imageUrl, title, description,
   return (
     <Card className="max-w-xs mx-auto shadow-lg rounded-lg overflow-hidden">
       <CardHeader className="relative">
-        <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+        <Image src={imageUrl} alt={title} className="w-full h-48 object-cover" />
       </CardHeader>
       <CardContent className="p-4">
         <CardTitle className="text-lg font-bold">{title}</CardTitle>
@@ -28,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ imageUrl, title, description,
       </CardContent>
       <CardFooter className="flex justify-between items-center p-4 bg-gray-100">
         <div className="flex justify-between w-full items-center">
-          <span className="text-xl font-semibold text-green-600">${price.toFixed(2)}</span>
+          <span className="text-xl font-semibold text-green-600">${price}</span>
           <div className="flex gap-2">
             <Button variant="outline"><Icon icon="weui:delete-outlined" /></Button>
             <Button variant="outline"><Icon icon="akar-icons:edit" /></Button>
