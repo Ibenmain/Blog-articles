@@ -20,5 +20,5 @@ export async function middleware(req: NextApiRequest) {
 }
 
 export const config = {
-    matcher: ["/home"],
+    matcher: ["/articles/:path*"],
 };

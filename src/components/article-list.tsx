@@ -1,19 +1,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Trash2, Edit, Eye } from 'lucide-react';
+import { ArticleListProps } from '@/types/articles';
 
-interface Article {
-  id: string;
-  title: string;
-  content: string;
-}
-
-interface ArticleListProps {
-  articles: Article[];
-  onDelete: (id: string) => void;
-  onUpdate: (article: Article) => void;
-  onExpand: (id: string) => void;
-}
 
 const ArticleList: React.FC<ArticleListProps> = ({ articles, onDelete, onUpdate, onExpand }) => {
   return (

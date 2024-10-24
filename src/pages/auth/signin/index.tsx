@@ -10,7 +10,6 @@ import { signIn } from "next-auth/react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/router"
 
-
 const validationSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email address')
@@ -20,17 +19,14 @@ const validationSchema = Yup.object().shape({
         .required('Password is required'),
 });
 
-
 interface FormValues {
     email: string;
     password: string;
 }
 
-// Handle form submission
 
 const SignIn = () => {
     const router = useRouter();
-
     const onSubmit = async ({ email, password }: FormValues) => {
         const result = await signIn('credentials', {
             redirect: false,
@@ -42,7 +38,7 @@ const SignIn = () => {
             toast.success("Successfully signed in!");
             console.log("Successfully signed in!", result);
 
-            router.push("/home");
+            router.push("/articles/articles-list");
         } else {
             toast.error("Invalid email or password :(");
         }

@@ -1,22 +1,11 @@
-// pages/articles/[id].tsx
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
+import { ArticleDetailProps } from '@/types/articles';
 
-interface Article {
-    id: string;
-    title: string;
-    content: string;
-    author?: string;
-    createdAt?: string;
-}
-
-interface ArticleDetailProps {
-    article: Article | null;
-}
 
 const ArticleDetail: React.FC<ArticleDetailProps> = ({ article }) => {
     const router = useRouter();
@@ -26,7 +15,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article }) => {
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-gray-700">Article Not Found</h1>
                     <p className="text-gray-500">We could&apos;t find the article you were looking for.</p>
-                    <Button onClick={() => router.push('/home')} variant="default" className="mt-4">Go Back Home</Button>
+                    <Button onClick={() => router.push('/articles/articles-list')} variant="default" className="mt-4">Go Back Home</Button>
                 </div>
             </div>
         );
@@ -53,7 +42,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article }) => {
                     <p>{article.content}</p>
                 </div>
                 <div className="mt-8">
-                    <Button onClick={() => router.push('/home')} variant="outline">Back to Articles</Button>
+                    <Button onClick={() => router.push('/articles/articles-list')} variant="outline">Back to Articles</Button>
                 </div>
             </div>
         </div>

@@ -6,13 +6,10 @@ import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Session } from "../../../next-auth";
+import { Session } from "../../../../../next-auth";
+import { ArticleFormDialogProps } from "@/types/articles";
 
-interface ArticleFormDialogProps {
-    isOpen: boolean;
-    onClose: () => void;
-    articleToEdit?: { id: string; title: string; content: string };
-}
+
 
 const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, articleToEdit }) => {
     const session = useSession() as { data: Session | null };
@@ -25,7 +22,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
     useEffect(() => {
         if (articleToEdit) {
             setData({
-                id:  articleToEdit.id,
+                id: articleToEdit.id,
                 title: articleToEdit.title,
                 content: articleToEdit.content,
             });
@@ -39,7 +36,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
     }, [articleToEdit]);
 
     const handleSubmit = async () => {
-        const  formData = {...data, userId: session.data?.user?.id as string };
+        const formData = { ...data, userId: session.data?.user?.id as string };
 
         try {
             if (articleToEdit) {
