@@ -29,7 +29,7 @@ const Profile = () => {
             }
         };
         getArticles();
-    }, []);
+    }, [isDialogOpen]);
 
     const handleDelete = async (id: string) => {
         try {

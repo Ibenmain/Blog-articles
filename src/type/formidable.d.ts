@@ -1,33 +1,33 @@
-// declare module 'formidable' {
-//     import { IncomingMessage } from 'http';
+declare module 'formidable' {
+    import { IncomingMessage } from 'http';
   
-//     interface Fields {
-//       [key: string]: any;
-//     }
+    interface Fields {
+      [key: string]: any;
+    }
   
-//     interface File {
-//       filepath: string;
-//       originalFilename?: string;
-//       mimetype?: string;
-//       size: number;
-//       newFilename: string;
-//     }
+    interface File {
+      filepath: string;
+      originalFilename?: string;
+      mimetype?: string;
+      size: number;
+      newFilename: string;
+    }
   
-//     interface Files {
-//       [key: string]: File;
-//     }
+    interface Files {
+      [key: string]: File;
+    }
   
-//     interface FormidableError extends Error {
-//       httpCode?: number;
-//     }
+    interface FormidableError extends Error {
+      httpCode?: number;
+    }
   
-//     class IncomingForm {
-//       parse(
-//         req: IncomingMessage,
-//         callback: (err: FormidableError | null, fields: Fields, files: Files) => void
-//       ): void;
-//     }
+    class IncomingForm {
+      parse(
+        req: IncomingMessage,
+        callback: (err: FormidableError | null, fields: Fields, files: Files) => void
+      ): void;
+    }
   
-//     export = IncomingForm;
-//   }
+    export = IncomingForm;
+  }
   
