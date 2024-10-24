@@ -7,12 +7,12 @@ COPY package-lock.json ./
 COPY prisma ./prisma
 COPY . .
 
+
 RUN npm install
-
 RUN npx prisma generate
-
-
 RUN npm run build
+RUN npm install @prisma/client
+RUN mkdir -p /app/.next/cache/images && chown -R node:node /app/.next
 
 ENV NODE_ENV production
 ENV PORT 3000
@@ -22,4 +22,4 @@ USER node
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
