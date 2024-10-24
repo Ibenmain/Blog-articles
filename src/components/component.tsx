@@ -1,43 +1,49 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Icon } from "@iconify/react";
-import Image from "next/image";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Trash2, Edit, Eye } from 'lucide-react';
 
-interface ProductCardProps {
-  imageUrl: string;
+interface Article {
+  id: string;
   title: string;
-  description: string;
-  price: number;
+  content: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ imageUrl, title, description, price }) => {
+interface ArticleListProps {
+  articles: Article[];
+  onDelete: (id: string) => void;
+  onUpdate: (article: Article) => void;
+  onExpand: (id: string) => void;
+}
+
+const ArticleList: React.FC<ArticleListProps> = ({ articles, onDelete, onUpdate, onExpand }) => {
   return (
-    <Card className="max-w-xs mx-auto shadow-lg rounded-lg overflow-hidden">
-      <CardHeader className="relative">
-        <Image src={imageUrl} alt={title} className="w-full h-48 object-cover" />
-      </CardHeader>
-      <CardContent className="p-4">
-        <CardTitle className="text-lg font-bold">{title}</CardTitle>
-        <CardDescription className="text-gray-700">{description}</CardDescription>
-      </CardContent>
-      <CardFooter className="flex justify-between items-center p-4 bg-gray-100">
-        <div className="flex justify-between w-full items-center">
-          <span className="text-xl font-semibold text-green-600">${price}</span>
-          <div className="flex gap-2">
-            <Button variant="outline"><Icon icon="weui:delete-outlined" /></Button>
-            <Button variant="outline"><Icon icon="akar-icons:edit" /></Button>
+    <div className="space-y-4">
+      {articles.map((article) => (
+        <div
+          key={article.id}
+          className="p-4 border border-gray-300 rounded-md shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center"
+        >
+          <div className="flex-1 mb-2 sm:mb-0">
+            <h3 className="text-lg font-semibold">{article.title}</h3>
+            <p className="text-gray-600">
+              {article.content.length > 50 ? `${article.content.substring(0, 50)}...` : article.content}
+            </p>
+          </div>
+          <div className="ml-4 flex space-x-2">
+            <Button variant="outline" onClick={() => onUpdate(article)} className="flex items-center">
+              <Edit className="mr-1" size={16} />
+            </Button>
+            <Button variant="outline" color="red" onClick={() => onDelete(article.id)} className="flex items-center">
+              <Trash2 className="mr-1" size={16} />
+            </Button>
+            <Button variant="outline" onClick={() => onExpand(article.id)} className="flex items-center">
+              <Eye className="mr-1" size={16} />
+            </Button>
           </div>
         </div>
-      </CardFooter>
-    </Card>
+      ))}
+    </div>
   );
 };
 
-export default ProductCard;
+export default ArticleList;

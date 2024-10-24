@@ -40,11 +40,11 @@ const SignIn = () => {
 
         if (result?.ok) {
             toast.success("Successfully signed in!");
-            console.log("Successfully signed in!", result.data);
+            console.log("Successfully signed in!", result);
 
             router.push("/home");
         } else {
-            toast.error("Invalid email or password");
+            toast.error("Invalid email or password :(");
         }
     }
 

@@ -14,10 +14,11 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
     },
+    "types": ["node", "aws-sdk"],
     "typeRoots": ["./node_modules/@types", "./types"],
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/middleware.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

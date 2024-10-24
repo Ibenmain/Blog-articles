@@ -1,36 +1,52 @@
 import React, { useEffect, useState } from 'react';
-// import ProductCard from '@/components/component';
-import AddProductDialog from '@/components/new-product';
+import ArticleList from '@/components/component';
 import { Button } from "@/components/ui/button";
 import { signOut } from 'next-auth/react';
 import axios from 'axios';
+import ArticleFormDialog from '@/components/new-article';
+
+interface Article {
+    id: string;
+    title: string;
+    content: string;
+}
 
 const Profile = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [products, setProducts] = useState([{
-        id: null,
-        imageUrl: null,
-        title: '',
-        description: '',
-        price: '',
-    }]);
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [articleToEdit, setArticleToEdit] = useState<Article | null>(null);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const getArticles = async () => {
             try {
-                const response = await axios.get('/api/product/get-product');
-                console.log('hello ',response.data);
-                setProducts(response.data);
+                const response = await axios.get('/api/articles/get-all-articles');
+                setArticles(response.data);
+            } catch (error) {
+                console.error('Failed to fetch articles', error);
             }
-            catch (error) {
-                console.log('Failed to fetch products');
-            }
-        }
-
-        fetchProducts();
+        };
+        getArticles();
     }, []);
 
-    console.log('product' ,products);
+    const handleDelete = async (id: string) => {
+        try {
+            const response = await axios.delete(`/api/articles/delete?id=${id}`);
+            if (response.status === 200) {
+                setArticles(articles.filter(article => article.id !== id));
+            }
+        } catch (error) {
+            console.error('Failed to delete article', error);
+        }
+    };
+
+    const handleUpdate = (article: Article) => {
+        setArticleToEdit(article);
+        setIsDialogOpen(true);
+    };
+
+    const handleExpand = (id: number) => {
+        console.log('Expand/View article', id);
+    };
 
     return (
         <div className="container flex-1 mx-auto">
@@ -38,27 +54,29 @@ const Profile = () => {
                 <div className="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
                     <h1 className="text-xl font-bold text-gray-800">My Website</h1>
                     <div className="space-x-4">
-                        <Button onClick={() => setIsDialogOpen(true)} variant="default">
-                            Add New Product
+                        <Button onClick={() => {
+                            setArticleToEdit(null);
+                            setIsDialogOpen(true);
+                        }} variant="default">
+                            Add Article
                         </Button>
-                        <Button variant={"outline"} onClick={() => signOut({ callbackUrl: '/' })}>signOut</Button>
+                        <Button variant={"outline"} onClick={() => signOut({ callbackUrl: '/' })}>
+                            Sign Out
+                        </Button>
                     </div>
                 </div>
             </header>
-            <AddProductDialog
+            <ArticleFormDialog
                 isOpen={isDialogOpen}
-                onClose={() => setIsDialogOpen(false)}
+                onClose={() => {
+                    setIsDialogOpen(false);
+                    setArticleToEdit(null);
+                }}
+                articleToEdit={articleToEdit!}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-24">
-                {/* {products && products?.map((product) => (
-                    <ProductCard
-                        key={product.id}
-                        imageUrl={product.imageUrl!}
-                        title={product.title}
-                        description={product.description}
-                        price={parseInt(product.price)}
-                    />
-                ))} */}
+            <div className="p-8 pt-20">
+                <h1 className="text-2xl font-bold mb-4">Articles</h1>
+                <ArticleList articles={articles} onDelete={handleDelete} onUpdate={handleUpdate} onExpand={handleExpand} />
             </div>
         </div>
     );
