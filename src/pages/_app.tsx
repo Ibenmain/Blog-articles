@@ -8,8 +8,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <SessionProvider>
-        <Toaster />
-        <Component {...pageProps} />
+          <Toaster />
+          <Component {...pageProps} />
       </SessionProvider>
 
     </>

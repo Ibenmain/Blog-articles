@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { Session } from "../../../next-auth";
 
 interface ArticleFormDialogProps {
     isOpen: boolean;
@@ -14,7 +15,7 @@ interface ArticleFormDialogProps {
 }
 
 const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, articleToEdit }) => {
-    const session = useSession();
+    const session = useSession() as { data: Session | null };
     const [data, setData] = useState({
         id: '',
         title: '',
@@ -38,7 +39,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
     }, [articleToEdit]);
 
     const handleSubmit = async () => {
-        const  formData = {...data, userId: session?.data?.user?.id};
+        const  formData = {...data, userId: session.data?.user?.id as string };
 
         try {
             if (articleToEdit) {
@@ -49,7 +50,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
                     toast.error('Failed to update article');
                 }
             } else {
-                const response = await axios.post('/api/articles', formData);
+                const response = await axios.post('/api/articles/add', formData);
                 if (response.status === 201) {
                     toast.success('Article added successfully');
                 } else {
@@ -57,6 +58,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
                 }
             }
         } catch (error) {
+            console.error('Failed to add/update article', error);
             toast.error('Failed to add/update article');
         } finally {
             onClose();

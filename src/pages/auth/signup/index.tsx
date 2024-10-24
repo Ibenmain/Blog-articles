@@ -59,7 +59,8 @@ const SignUp = () => {
         }
 
         catch (error) {
-            toast.error(error.response?.data);
+            console.error('Failed to create user', error);
+            toast.error('Failed to create user');
         }
     }
 

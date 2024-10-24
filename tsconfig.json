@@ -16,9 +16,9 @@
     "paths": {
       "@/*": ["./src/*"],
     },
-    "types": ["node", "aws-sdk"],
+    "types": ["node"],
     "typeRoots": ["./node_modules/@types", "./types"],
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/middleware.ts"],
+  "include": ["next-auth.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", "src/middleware.ts"],
   "exclude": ["node_modules"],
 }
