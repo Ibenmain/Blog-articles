@@ -24,7 +24,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 createdAt: true,
             },
         });
-        console.log(article);
         return res.status(200).send(article);
     } catch (error) {
         console.log(error);

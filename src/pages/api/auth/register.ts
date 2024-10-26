@@ -18,7 +18,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const existingUser = await db.user.findUnique({ where: { email } });
     if (existingUser) {
-        console.log('User already exists with that email');
       return res.status(409).send('User already exists with that email');
     }
 

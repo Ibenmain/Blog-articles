@@ -33,7 +33,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
                 content: '',
             });
         }
-    }, [articleToEdit]);
+    }, [articleToEdit, isOpen]);
 
     const handleSubmit = async () => {
         const formData = { ...data, userId: session.data?.user?.id as string };

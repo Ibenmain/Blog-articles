@@ -36,8 +36,6 @@ const SignIn = () => {
 
         if (result?.ok) {
             toast.success("Successfully signed in!");
-            console.log("Successfully signed in!", result);
-
             router.push("/articles/articles-list");
         } else {
             toast.error("Invalid email or password :(");

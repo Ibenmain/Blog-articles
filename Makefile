@@ -8,7 +8,7 @@ build:
 up:
 	$(DOCKER_COMPOSE) up
 down:
-	$(DOCKER_COMPOSE) down
+	$(DOCKER_COMPOSE) down -v
 restart:
 	$(DOCKER_COMPOSE) down && $(DOCKER_COMPOSE) up --build
 migrate:

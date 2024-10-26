@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 
 const secret = process.env.NEXTAUTH_SECRET;
 
-console.log('secret', secret);
 
 export async function middleware(req: NextApiRequest) {
     const token = await getToken({ req, secret });
