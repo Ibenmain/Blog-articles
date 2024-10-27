@@ -27,4 +27,5 @@ export interface ArticleFormDialogProps {
     isOpen: boolean;
     onClose: () => void;
     articleToEdit?: { id: string; title: string; content: string };
+    refetch: () => void;
 }

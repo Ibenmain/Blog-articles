@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import ArticleList from '@/components/article-list';
 import { Button } from "@/components/ui/button";
@@ -7,32 +7,30 @@ import axios from 'axios';
 import ArticleFormDialog from '@/pages/articles/components/article-form';
 import Image from 'next/image';
 import { Article } from '@/types/articles';
+import { useQuery } from 'react-query';
 
-
+const fetchArticles = async () => {
+    try {
+        const response = await axios.get('/api/articles/get-all-articles');
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch articles', error);
+    }
+};
 
 const Articles = () => {
     const router = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [articles, setArticles] = useState<Article[]>([]);
     const [articleToEdit, setArticleToEdit] = useState<Article | null>(null);
-
-    useEffect(() => {
-        const getArticles = async () => {
-            try {
-                const response = await axios.get('/api/articles/get-all-articles');
-                setArticles(response.data);
-            } catch (error) {
-                console.error('Failed to fetch articles', error);
-            }
-        };
-        getArticles();
-    }, [isDialogOpen]);
+    const { data: articles = [], refetch } = useQuery<Article[]>('articles', fetchArticles, {
+        refetchOnWindowFocus: false,
+    });
 
     const handleDelete = async (id: string) => {
         try {
             const response = await axios.delete(`/api/articles/delete?id=${id}`);
             if (response.status === 200) {
-                setArticles(articles.filter(article => article.id !== id));
+                refetch();
             }
         } catch (error) {
             console.error('Failed to delete article', error);
@@ -72,6 +70,7 @@ const Articles = () => {
                     setIsDialogOpen(false);
                     setArticleToEdit(null);
                 }}
+                refetch={refetch}
                 articleToEdit={articleToEdit!}
             />
             <div className="p-8 pt-20">

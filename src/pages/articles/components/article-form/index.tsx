@@ -9,9 +9,7 @@ import { useSession } from "next-auth/react";
 import { Session } from "../../../../../next-auth";
 import { ArticleFormDialogProps } from "@/types/articles";
 
-
-
-const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, articleToEdit }) => {
+const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, articleToEdit, refetch }) => {
     const session = useSession() as { data: Session | null };
     const [data, setData] = useState({
         id: '',
@@ -35,6 +33,8 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
         }
     }, [articleToEdit, isOpen]);
 
+    
+
     const handleSubmit = async () => {
         const formData = { ...data, userId: session.data?.user?.id as string };
 
@@ -43,6 +43,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
                 const response = await axios.put(`/api/articles/edit`, data);
                 if (response.status === 200) {
                     toast.success('Article updated successfully');
+                    refetch();
                 } else {
                     toast.error('Failed to update article');
                 }
@@ -50,6 +51,7 @@ const ArticleFormDialog: React.FC<ArticleFormDialogProps> = ({ isOpen, onClose, 
                 const response = await axios.post('/api/articles/add', formData);
                 if (response.status === 201) {
                     toast.success('Article added successfully');
+                    refetch();
                 } else {
                     toast.error('Failed to add article');
                 }

@@ -8,9 +8,10 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://ibenmain:VY0yaivvyAC74D2L7pyECuEynRbvGPBoFmKHW4Kzw4W03EydUHwXa@postgres_db:5432/mydb
+      DATABASE_URL: postgresql://ibenmain:VY0yaivvyAC74D2L7pyECuEynRbvGPBoFmKHW4Kzw4W03EydUHwXa@localhost:5432/mydb
       NEXTAUTH_SECRET: "52e455dee7ec0e3e1cb8a4859cc474bf099bb15bcee407f1f2346359b9301500"
       NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: "http://localhost:3000"
     ports:
       - '3000:3000'
     depends_on:
