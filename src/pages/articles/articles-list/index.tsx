@@ -28,7 +28,7 @@ const Articles = () => {
         getArticles();
     }, [isDialogOpen]);
 
-    const handleDelete = async (id: string) => {+
+    const handleDelete = async (id: string) => {
         try {
             const response = await axios.delete(`/api/articles/delete?id=${id}`);
             if (response.status === 200) {
